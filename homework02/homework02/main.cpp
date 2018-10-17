@@ -2,6 +2,9 @@
 #include <QVector>
 #include <QTextStream>
 #include <QFile>
+using namespace std;
+
+#define n 4
 
 namespace SK {
 enum SortKind{
@@ -40,14 +43,18 @@ enum SortKind{
 };
 }
 
-
 typedef struct{
+    QList<QString>student;
     // 请补全结构定义
 } studData;
 
 QDebug operator<< (QDebug d, const studData &data) {
+    int i;
+    for(i=0;i<data.student.size();i++)
+        d<<data.student.at(i);
+        return d;
     // 请补全运算符重载函数，使其可以直接输出studData结构
-    return d;
+
 }
 
 // 比较类，用于std::sort第三个参数
@@ -63,14 +70,15 @@ bool myCmp::operator()(const studData &d1, const studData &d2)
 {
     bool result = false;
     quint32 sortedColumn = 0x00000001<<currentColumn;
-    switch (sortedColumn) {
-    case SK::col01:
-    // ...
-    // 请补全运算符重载函数
-    // ...
-    //
-    }
-    return result;
+    switch (sortedColumn)
+    {
+    default:;break; case SK::col01:
+         result=d1.student.at(currentColumn)>d2.student.at(currentColumn);
+         break;
+        }
+        return result;
+
+
 
 }
 
@@ -79,24 +87,46 @@ class ScoreSorter
 {
 public:
     ScoreSorter(QString dataFile);
-    // ...
-    // 请补全该类，使其实现上述要求
-    // ...
-}
-
+    void readFile();
+    void doSort();
+private:
+    QString Sorter;
+    QList<studData> Student;
+    QByteArray line;   //数据表头
+};
 // 请补全
-ScoreSorter::ScoreSorter(QString dataFile){
-}
-
-
-void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+ScoreSorter::ScoreSorter(QString dataFile)
 {
-    // 自定义qDebug
+    Sorter=dataFile;
 }
+void ScoreSorter::doSort(){
+    myCmp compare(n);
+    qDebug()<<"排序后输出，当前排序第"<<n<<"列";
+    std::sort(Student.begin(),Student.end(),compare);
+    qDebug()<<Student;
+    qDebug()<<"-----------------------------------"<<endl;
+}
+void ScoreSorter::readFile(){
+    QFile file(Sorter);
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+        qDebug()<<QString("文件打开失败");
+        return;
+    }
+    while(!file.atEnd()){
+        studData tempstudent;
+        this->line=file.readLine();
+        QString string(line);
+      tempstudent.student=string.split(" ",QString::SkipEmptyParts);
+       Student.append(tempstudent);
+    }
+    file.close();
+}
+
+//Void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg){}
 
 int main()
 {
-    qInstallMessageHandler(myMessageOutput);
+    //qInstallMessageHandler(myMessageOutput);
     QString datafile = "data.txt";
 
     // 如果排序后文件已存在，则删除之
