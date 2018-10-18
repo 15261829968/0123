@@ -183,6 +183,7 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
     file.open(QIODevice::WriteOnly | QIODevice::Append);
     QTextStream stream(&file);
     stream <<msg << endl;
+    stream.setCodec("UTF-8");
     file.flush();
     file.close();
     QTextStream ts (stdout);
