@@ -3,6 +3,8 @@
 #include <QPen>
 #include <QMessageBox>
 #include <QDateTime>
+#include <QFileDialog>
+#include <QString>
 
 DrawWidget::DrawWidget(QWidget *parent) : QWidget(parent)
 {
@@ -108,8 +110,10 @@ canDraw = true;
 
  void DrawWidget::increase()
 {
-    QImage iconImage;
-    iconImage.load("://src/jpg/2.jpg");    //QImage读取图片
+     QImage iconImage;
+     QString filename=QFileDialog::getOpenFileName(this,tr("选择图像"),"",tr("Images (*.png *.bmp *.jpg)"));
+         iconImage.load(filename);    //读取图片
+        //iconImage.load("://src/jpg/2.jpg");    //QImage读取图片
     QPixmap *newPix = new QPixmap(size());
     *newPix=QPixmap(*this->pix);             //新的pix拷贝原内容,避免之前所画内容丢失
     *pix = QPixmap::fromImage(iconImage.scaledToWidth(pix->size().width()*0.5 , Qt::FastTransformation));

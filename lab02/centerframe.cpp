@@ -9,6 +9,9 @@
 #include <QGridLayout>
 #include <QLineEdit>
 #include <QDebug>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QVector>
 
 CenterFrame::CenterFrame(QWidget *parent) : QFrame(parent)
 {
@@ -350,11 +353,16 @@ void CenterFrame::on_btnDiamondClicked()
  }
 void CenterFrame::on_imgBtnClicked()
 {
- if(imgBtn->isChecked()){
-   drawWidget->increase() ;           //检查,被按下则画图
-   updateButtonStatus();
- }else{
-   drawWidget->setShapeType(ST::None);
- }
-}
+    if(imgBtn->isChecked())
+         {
+             drawWidget->setShapeType(ST::Graph);
+             drawWidget->increase();
+             updateButtonStatus();
+         }
+         else
+         {
 
+             drawWidget->setShapeType(ST::None);
+         }
+
+}
