@@ -2,16 +2,16 @@
 #include <QMouseEvent>
 #include <QPen>
 #include <QMessageBox>
-
+#include <QDateTime>
 
 DrawWidget::DrawWidget(QWidget *parent) : QWidget(parent)
 {
 drawType = ST::None;
 canDraw = false;
 setAutoFillBackground (true); //设置窗体背景色
-setPalette (QPalette(BACKGROUND_COLOR));
+setPalette (QPalette(FOREGROUND_COLOR));
 pix = new QPixmap(size()); //此QPixmap对象用来准备随时接受绘制的内容
-pix->fill (BACKGROUND_COLOR); //填充背景色为白色
+pix->fill (FOREGROUND_COLOR); //填充背景色为白色
 setMinimumSize (600, 400); //设置绘制区窗体的最小尺寸
 
 }
@@ -97,7 +97,7 @@ canDraw = true;
   if(height () > pix->height () || width() > pix->width ())
   {
   QPixmap *newPix = new QPixmap(size());
-  newPix->fill (BACKGROUND_COLOR);
+  newPix->fill (FOREGROUND_COLOR);
   QPainter p(newPix);
   p.drawPixmap (QPoint(0, 0), *pix);
   delete pix; //一定要删除原来的对象，否则会出现内存泄漏
@@ -106,11 +106,32 @@ canDraw = true;
   QWidget::resizeEvent(event);
  }
 
+ void DrawWidget::increase()
+{
+    QImage iconImage;
+    iconImage.load("://src/jpg/2.jpg");    //QImage读取图片
+    QPixmap *newPix = new QPixmap(size());
+    *newPix=QPixmap(*this->pix);             //新的pix拷贝原内容,避免之前所画内容丢失
+    *pix = QPixmap::fromImage(iconImage.scaledToWidth(pix->size().width()*0.5 , Qt::FastTransformation));
+    QPainter p(newPix);                             //正中添加图片,宽度为当前窗口的0.5倍,高度自动缩放
+    p.drawPixmap (QPoint((width()-pix->width())/2,(height()-pix->width())/2), *pix);
+    delete pix;     //删除原pix
+    pix = newPix;
+    update();
+}
+
+void DrawWidget::save()
+{
+    QDateTime current_date_time =QDateTime::currentDateTime();     //当前时间作为文件名(避免覆盖)
+    QString currentDate =current_date_time.toString("yyyy-MM-dd_hh-mm-ss");
+    QString fileName=tr("E:/lab02_%1.png").arg(currentDate);
+    this->pix->save(fileName);         //保存文件
+}
 
  void DrawWidget::clear ()
  {
   // 清除绘图内容，简单的用背景色填充整个画布即可
-  pix->fill(BACKGROUND_COLOR);
+  pix->fill(FOREGROUND_COLOR);
   update ();
  }
 

@@ -36,6 +36,8 @@ void setStyle(int);
 void setWidth(int);
 void setColor(QColor);
 void clear();
+void increase();//添加
+void save();//保存
 
 private :
 QPixmap *pix;

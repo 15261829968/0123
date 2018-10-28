@@ -31,6 +31,7 @@ public slots:
     void setPenWidth(int width=1);
     void setPenColor(QColor color);
     void clearPaint();
+    void saveGraph();
 
 protected slots:
     void on_btnRectClicked();
@@ -40,6 +41,7 @@ protected slots:
     void on_btnTextClicked();
     void on_edtTextEdited(const QString &text);
     void on_btnDiamondClicked();
+    void on_imgBtnClicked();
 private:
     QVBoxLayout* vLayout;
     QHBoxLayout* hLayout;
@@ -50,9 +52,11 @@ private:
     QPushButton* btnLine;
     QPushButton* btnTriangle;
     QPushButton* btnText;
+    QPushButton* imgBtn;
+    QPushButton* btnDiamond;
     QLineEdit* edtText;
 
-    QPushButton* btnDiamond;
+
 };
 
   #endif // CENTERFRAME_H

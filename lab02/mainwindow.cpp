@@ -23,7 +23,7 @@ setWindowTitle(tr("实验二 - 窗口、控件及基本绘图实验 "));
 penStyleChangged(styleComboBox->currentData().toInt()); //初始化线型，设置控件中当前值作为初始值
 
 centerFrame->setPenWidth (widthSpinBox->value ()); //设置初始线宽
-centerFrame->setPenColor (FOREGROUND_COLOR); //设置初始颜色
+centerFrame->setPenColor (BACKGROUND_COLOR); //设置初始颜色
 }
 
 MainWindow::~MainWindow()
@@ -62,7 +62,7 @@ widthSpinBox->setValue(1);
 // 颜色选择框
 colorBtn = new QToolButton;
 QPixmap pixmap(20, 20);
-pixmap.fill (FOREGROUND_COLOR);
+pixmap.fill (BACKGROUND_COLOR);
 colorBtn->setIcon (QIcon(pixmap));
 colorBtn->setToolTip(tr("选择画笔颜色"));
 connect (colorBtn, &QToolButton::clicked, this, &MainWindow::penColorChangged);
@@ -73,13 +73,12 @@ clearBtn = new QToolButton;
 clearBtn->setText (tr("清除"));
 clearBtn->setToolTip(tr("清除当前画板"));
 connect (clearBtn, &QToolButton::clicked, centerFrame, &CenterFrame::clearPaint);
-imgBtn =new QToolButton;
-pixmap.fill (BACKGROUND_COLOR);
-QPainter painter(&pixmap);
-QImage image(":/");
-QRect targetRect(0,0,20,20);
-QRect sourceRect = image.rect();
-painter.drawImage(targetRect,image,sourceRect);
+
+//保存按键
+saveBtn= new QToolButton;
+saveBtn->setText(tr("保存"));
+saveBtn->setToolTip("默认路径:E:\\");
+connect(saveBtn,&QToolButton::clicked,centerFrame,&CenterFrame::saveGraph);
 
   // 向工具栏上添加各个控件
   toolBar->addWidget (styleLabel);
@@ -89,7 +88,7 @@ painter.drawImage(targetRect,image,sourceRect);
   toolBar->addWidget (colorBtn);
   toolBar->addSeparator();
   toolBar->addWidget (clearBtn);
-  toolBar->addWidget (imgBtn);
+  toolBar->addWidget(saveBtn);
  }
 
  void MainWindow::penStyleChangged (int index)

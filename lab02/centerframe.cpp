@@ -116,6 +116,20 @@ p.fill(FOREGROUND_COLOR);
   connect(btnDiamond,&QPushButton::clicked,
           this,&CenterFrame::on_btnDiamondClicked);
 
+  //图片按钮
+  imgBtn= new QPushButton(group);
+  imgBtn->setCheckable(true);
+  imgBtn->setIconSize(p.size());
+  imgBtn->setToolTip("绘制图片文件");
+  QPixmap pixmap(p.size());
+  QPainter paint(&pixmap);
+  QImage image("://src/jpg/2.jpg");
+  QRect targetRect(0,0,p.size().width(),p.size().height());
+  QRect sourceRect =image.rect();
+  paint.drawImage(targetRect,image,sourceRect);
+  connect(imgBtn,&QPushButton::clicked,this,&CenterFrame::on_imgBtnClicked);
+  imgBtn->setIcon(QIcon(pixmap));
+
 
   // 文本按钮
   btnText = new QPushButton(group);
@@ -142,6 +156,7 @@ p.fill(FOREGROUND_COLOR);
   gridLayout->addWidget(btnLine,1,1);
   gridLayout->addWidget(btnText,2,0);
   gridLayout->addWidget(btnDiamond,2,1);
+  gridLayout->addWidget(imgBtn,3,0);
   gridLayout->setMargin(3);
   gridLayout->setSpacing(3);
   group->setLayout(gridLayout);
@@ -260,7 +275,10 @@ p.fill(FOREGROUND_COLOR);
  {
   drawWidget->clear();
  }
-
+ void CenterFrame::saveGraph()
+ {
+    drawWidget->save();      //跳转到 drawWidget 中的save
+ }
 
  void CenterFrame::on_btnRectClicked()
  {
@@ -330,3 +348,13 @@ void CenterFrame::on_btnDiamondClicked()
          drawWidget->setShapeType(ST::None);
      }
  }
+void CenterFrame::on_imgBtnClicked()
+{
+ if(imgBtn->isChecked()){
+   drawWidget->increase() ;           //检查,被按下则画图
+   updateButtonStatus();
+ }else{
+   drawWidget->setShapeType(ST::None);
+ }
+}
+

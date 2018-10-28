@@ -9,12 +9,13 @@ Ellipse = 0x01<<2,
 Triangle = 0x01<<3,
 Diamond = 0x01<<4,
 Text = 0x01<<5,
+Graph = 0x01<<6,
 TypeMask = 0x0f
 };
 }
 
-#define BACKGROUND_COLOR Qt::white
-#define FOREGROUND_COLOR Qt::blue
+#define BACKGROUND_COLOR Qt::blue
+#define FOREGROUND_COLOR Qt::white
 
 
 #endif // COMMON_H
